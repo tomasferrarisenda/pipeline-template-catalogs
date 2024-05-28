@@ -36,7 +36,7 @@ pipeline {
         when {
             allOf {
             expression { dockerfiles }
-            branch "master"
+            branch "main"
             }
         }
         steps {
