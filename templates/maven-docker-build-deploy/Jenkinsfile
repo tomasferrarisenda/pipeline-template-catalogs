@@ -28,7 +28,7 @@ pipeline {
         script {
           env.DOCKERFILES           = dockerfiles
           env.GITHUB_ORGANIZATION   = github_organization.toLowerCase()
-          env.SYSTEM                = system.toLowerCase()
+          // env.SYSTEM                = system.toLowerCase()
           env.GITHUB_REPO           = github_repo.toLowerCase()
           env.DOCKER_USERNAME       = docker_username.toLowerCase()
         }
@@ -61,8 +61,8 @@ pipeline {
     stage ('update values') {
       steps {
         script {
-          git clone https://github.com/tomasferrarisenda/cloudbees-core-minikube-lab.git
-          updateValues.updateDev(tag: env.BUILD_NUMBER, system: env.SYSTEM, service: env.GITHUB_REPO)
+          // updateValues.updateDev(tag: env.BUILD_NUMBER, system: env.SYSTEM, service: env.GITHUB_REPO)
+          updateValues.updateDev(tag: env.BUILD_NUMBER)
           gitCommit.commitAndPush(email: "tomas.ferrari@sendati.com", organization: env.GITHUB_ORGANIZATION, service: env.GITHUB_REPO)
         }
       }

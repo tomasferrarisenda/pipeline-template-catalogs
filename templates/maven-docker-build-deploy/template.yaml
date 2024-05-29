@@ -15,9 +15,9 @@ parameters:
     type: string
     displayName: Specify the GitHub Repository e.g. omniman-service (mandatory)
 
-  - name: system
-    type: string
-    displayName: Specify the system this service belongs to e.g. invincible-gtg (mandatory)
+  # - name: system
+  #   type: string
+  #   displayName: Specify the system this service belongs to e.g. invincible-gtg (mandatory)
 
   # - name: headWildcardFilterIncludes
   #   type: string
