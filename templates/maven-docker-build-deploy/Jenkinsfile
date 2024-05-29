@@ -27,6 +27,7 @@ pipeline {
       steps {
         script {
           env.DOCKERFILES        = dockerfiles
+          env.GITHUB_ORGANIZATION        = github_organization.toLowerCase()
           env.GITHUB_REPO        = github_repo.toLowerCase()
           env.DOCKER_USERNAME         = docker_username.toLowerCase()
         }
@@ -54,6 +55,16 @@ pipeline {
             }
           }
         }
+    }
+
+    stage ('update values') {
+      steps {
+        script {
+          checkout scm
+          updateValues.updateDev(tag: env.BUILD_NUMBER, system: env.GITHUB_ORGANIZATION, service: env.GITHUB_REPO)
+          gitCommit.commitAndPush(email: "tomas.ferrari@sendati.com", organization: env.GITHUB_ORGANIZATION, service: env.GITHUB_REPO)
+        }
+      }
     }
   }
   // post { 
