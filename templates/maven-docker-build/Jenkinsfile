@@ -46,8 +46,6 @@ pipeline {
                 mavenInstall.test()
             }
           }
-        }
-        steps {
           container('docker') {
             script {
                 dockerBuild.login()
