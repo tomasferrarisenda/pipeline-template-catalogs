@@ -13,7 +13,7 @@ parameters:
 
   - name: github_repo
     type: string
-    displayName: Specify the GitHub Repository e.g. nodejs-project (mandatory)
+    displayName: Specify the GitHub Repository e.g. cloudbees-core-minikube-lab (mandatory)
 
   # - name: headWildcardFilterIncludes
   #   type: string
