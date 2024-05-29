@@ -15,6 +15,10 @@ parameters:
     type: string
     displayName: Specify the GitHub Repository e.g. omniman-service (mandatory)
 
+  - name: system
+    type: string
+    displayName: Specify the system this service belongs to e.g. invincible-gtg (mandatory)
+
   # - name: headWildcardFilterIncludes
   #   type: string
   #   displayName: "Space-separated list of name patterns to consider. You may use * as a wildcard; for example: master release*"

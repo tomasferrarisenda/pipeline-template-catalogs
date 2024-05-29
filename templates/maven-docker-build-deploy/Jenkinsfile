@@ -26,10 +26,11 @@ pipeline {
     stage ('preparation') {
       steps {
         script {
-          env.DOCKERFILES        = dockerfiles
-          env.GITHUB_ORGANIZATION        = github_organization.toLowerCase()
-          env.GITHUB_REPO        = github_repo.toLowerCase()
-          env.DOCKER_USERNAME         = docker_username.toLowerCase()
+          env.DOCKERFILES           = dockerfiles
+          env.GITHUB_ORGANIZATION   = github_organization.toLowerCase()
+          env.SYSTEM                = system.toLowerCase()
+          env.GITHUB_REPO           = github_repo.toLowerCase()
+          env.DOCKER_USERNAME       = docker_username.toLowerCase()
         }
       }
     }
