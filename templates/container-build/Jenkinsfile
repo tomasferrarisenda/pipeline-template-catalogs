@@ -13,7 +13,6 @@ pipeline {
     HOME           = "${WORKSPACE}"
   }
 
-  container('dind') {
   stages {
     stage ('cleanWs & checkout scm') {
       steps {
@@ -49,8 +48,6 @@ pipeline {
         }
     }
   }
-  }
-
   // post { 
   //   always {
   //     script {
