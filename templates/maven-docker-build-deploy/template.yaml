@@ -42,7 +42,7 @@ parameters:
 
   - name: docker_username
     type: string
-    displayName: Specify the container tagname e.g. tferrari92 (mandatory)
+    displayName: Specify the DockerHub username e.g. tferrari92 (mandatory)
 
 multibranch:
   branchSource:
