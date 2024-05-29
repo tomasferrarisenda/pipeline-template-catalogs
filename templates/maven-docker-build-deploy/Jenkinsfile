@@ -61,7 +61,7 @@ pipeline {
     stage ('Update values') {
       steps {
         script {
-          checkout changelog: false, poll: false, scm: scmGit(branches: [[name: '*/main']], extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: env.GITHUB_REPO + '-helm-chart']], userRemoteConfigs: [[credentialsId: 'github', url: 'https://github.com/tomasferrarisenda/omniman-service-helm-chart.git']])
+          checkout changelog: false, poll: false, scm: scmGit(branches: [[name: '*/main']], extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: env.GITHUB_REPO + '-helm-chart']], userRemoteConfigs: [[credentialsId: 'github', url: 'https://github.com/' + env.GITHUB_ORGANIZATION + '/' + env.GITHUB_REPO + '-helm-chart.git']])
           dir(env.GITHUB_REPO + '-helm-chart') {
             updateValues.updateDev(tag: env.BUILD_NUMBER)
             updateValues.updateStage(tag: env.BUILD_NUMBER)
