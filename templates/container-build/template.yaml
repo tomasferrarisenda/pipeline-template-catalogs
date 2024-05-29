@@ -29,7 +29,7 @@ parameters:
 
   - name: dockerfiles
     type: string
-    displayName: Specify the path to the Dockerfile(s) as semicolon delimited string e.g. app01/Dockerfile (optional)
+    displayName: Specify the path to the Dockerfile(s) as semicolon delimited string e.g. application-code/invincible-gtg/Dockerfile (optional)
     
   # - name: build_arguments
   #   type: string
