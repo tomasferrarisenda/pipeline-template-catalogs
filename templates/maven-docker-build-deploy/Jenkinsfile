@@ -61,7 +61,7 @@ pipeline {
     stage ('update values') {
       steps {
         script {
-          checkout scm
+          git clone https://github.com/tomasferrarisenda/cloudbees-core-minikube-lab.git
           updateValues.updateDev(tag: env.BUILD_NUMBER, system: env.SYSTEM, service: env.GITHUB_REPO)
           gitCommit.commitAndPush(email: "tomas.ferrari@sendati.com", organization: env.GITHUB_ORGANIZATION, service: env.GITHUB_REPO)
         }
