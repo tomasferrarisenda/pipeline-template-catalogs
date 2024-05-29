@@ -32,7 +32,7 @@ pipeline {
         }
       }
     }
-    stage('Build and push') {
+    stage('Build, push and deploy') {
         when {
             allOf {
             expression { dockerfiles }
