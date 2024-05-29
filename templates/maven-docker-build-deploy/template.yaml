@@ -29,8 +29,8 @@ parameters:
 
   - name: dockerfiles
     type: string
-    default: "Dockerfile"
-    displayName: Specify the path to the Dockerfile(s) as semicolon delimited string e.g. application-code/invincible-gtg/Dockerfile (optional)
+    # default: "Dockerfile" # doesn't work
+    displayName: Specify the path to the Dockerfile(s) as semicolon delimited string e.g. application-code/invincible-gtg/Dockerfile (mandatory)
     
   # - name: build_arguments
   #   type: string
