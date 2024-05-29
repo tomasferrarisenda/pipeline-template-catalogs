@@ -49,8 +49,8 @@ pipeline {
           container('docker') {
             script {
                 dockerBuild.login()
-                dockerBuild.build(env.DOCKER_USERNAME + env.GITHUB_REPO + ":" + ${BUILD_NUMBER})
-                dockerBuild.push(env.DOCKER_USERNAME + env.GITHUB_REPO + ":" + ${BUILD_NUMBER})
+                dockerBuild.build(env.DOCKER_USERNAME + "/" + env.GITHUB_REPO + ":" + ${BUILD_NUMBER})
+                dockerBuild.push(env.DOCKER_USERNAME + "/" + env.GITHUB_REPO + ":" + ${BUILD_NUMBER})
             }
           }
         }
