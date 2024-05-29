@@ -66,9 +66,9 @@ pipeline {
           sh 'ls'
           dir('omniman-service-helm-chart') {
             sh 'ls'
+            updateValues.updateDev(tag: env.BUILD_NUMBER)
+            gitCommit.commitAndPush(email: "tomas.ferrari@sendati.com", organization: env.GITHUB_ORGANIZATION, service: env.GITHUB_REPO)
           }
-          updateValues.updateDev(tag: env.BUILD_NUMBER)
-          gitCommit.commitAndPush(email: "tomas.ferrari@sendati.com", organization: env.GITHUB_ORGANIZATION, service: env.GITHUB_REPO)
         }
       }
     }
