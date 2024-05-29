@@ -62,7 +62,7 @@ pipeline {
       steps {
         script {
           checkout scm
-          updateValues.updateDev(tag: env.BUILD_NUMBER, system: env.GITHUB_ORGANIZATION, service: env.GITHUB_REPO)
+          updateValues.updateDev(tag: env.BUILD_NUMBER, system: env.SYSTEM, service: env.GITHUB_REPO)
           gitCommit.commitAndPush(email: "tomas.ferrari@sendati.com", organization: env.GITHUB_ORGANIZATION, service: env.GITHUB_REPO)
         }
       }
