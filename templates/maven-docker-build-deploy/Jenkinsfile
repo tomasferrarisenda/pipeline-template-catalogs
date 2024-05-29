@@ -64,6 +64,9 @@ pipeline {
           // git branch: 'main', url: "https://github.com/tomasferrarisenda/omniman-service-helm-chart.git"
           checkout changelog: false, poll: false, scm: scmGit(branches: [[name: '*/main']], extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'omniman-service-helm-chart']], userRemoteConfigs: [[credentialsId: 'github', url: 'https://github.com/tomasferrarisenda/omniman-service-helm-chart.git']])
           sh 'ls'
+          dir('omniman-service-helm-chart') {
+            sh 'ls'
+          }
           updateValues.updateDev(tag: env.BUILD_NUMBER)
           gitCommit.commitAndPush(email: "tomas.ferrari@sendati.com", organization: env.GITHUB_ORGANIZATION, service: env.GITHUB_REPO)
         }
