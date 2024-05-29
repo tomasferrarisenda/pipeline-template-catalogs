@@ -44,6 +44,7 @@ parameters:
     type: string
     displayName: Specify the DockerHub username e.g. tferrari92 (mandatory)
 
+
 multibranch:
   branchSource:
     github:
