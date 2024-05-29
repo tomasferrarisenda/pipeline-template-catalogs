@@ -14,45 +14,45 @@ pipeline {
   }
 
   stages {
-    container('dind') {
-      stage ('cleanWs & checkout scm') {
-        steps {
-          script {
-            deleteDir()
-            // cleanWs()
-            checkout scm
-          }
-        }
-      }
-    }
-    container('dind') {
-      stage ('preparation') {
-        steps {
-          script {
-            env.DOCKERFILES        = dockerfiles
-            env.GITHUB_REPO        = github_repo.toLowerCase()
-            env.DOCKER_TAG         = docker_tag.toLowerCase()
-          }
-        }
-      }
-    }
-    container('dind') {
-      stage('Container build') {
-          when {
-              allOf {
-              expression { dockerfiles }
-              branch "main"
-              }
-          }
-          steps {
+      container('dind') {
+          stage ('cleanWs & checkout scm') {
+            steps {
               script {
-                  dockerBuild.login()
-                  dockerBuild.build(env.DOCKER_TAG)
-                  dockerBuild.push(env.DOCKER_TAG)
+                deleteDir()
+                // cleanWs()
+                checkout scm
+              }
+            }
+          }
+      }
+      container('dind') {
+          stage ('preparation') {
+            steps {
+              script {
+                env.DOCKERFILES        = dockerfiles
+                env.GITHUB_REPO        = github_repo.toLowerCase()
+                env.DOCKER_TAG         = docker_tag.toLowerCase()
+              }
+            }
+          }
+      }
+      container('dind') {
+          stage('Container build') {
+              when {
+                  allOf {
+                  expression { dockerfiles }
+                  branch "main"
+                  }
+              }
+              steps {
+                  script {
+                      dockerBuild.login()
+                      dockerBuild.build(env.DOCKER_TAG)
+                      dockerBuild.push(env.DOCKER_TAG)
+                  }
               }
           }
       }
-   }
   }
   // post { 
   //   always {
