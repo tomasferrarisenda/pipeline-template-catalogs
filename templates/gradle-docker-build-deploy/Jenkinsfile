@@ -1,0 +1,81 @@
+@Library('global-shared-library')_
+
+/* Pipeline */
+pipeline {
+  agent { label "containerBuilds" }
+  options { 
+    // ansiColor('xterm') 
+    disableConcurrentBuilds()
+    skipDefaultCheckout true
+  }
+
+  environment {
+    HOME           = "${WORKSPACE}"
+  }
+
+  stages {
+    stage ('cleanWs & checkout scm') {
+      steps {
+        script {
+          deleteDir()
+          // cleanWs()
+          checkout scm
+        }
+      }
+    }
+    stage ('preparation') {
+      steps {
+        script {
+          env.DOCKERFILES           = dockerfiles
+          env.GITHUB_ORGANIZATION   = github_organization.toLowerCase()
+          // env.SYSTEM                = system.toLowerCase()
+          env.GITHUB_REPO           = github_repo.toLowerCase()
+          env.DOCKER_USERNAME       = docker_username.toLowerCase()
+        }
+      }
+    }
+    stage('Build, push and deploy') {
+        when {
+            allOf {
+            expression { dockerfiles }
+            branch "main"
+            }
+        }
+        steps {
+          container('gradle') {
+            script {
+                gradleMicroBundle.microBundle()
+            }
+          }
+          container('docker') {
+            script {
+                dockerBuild.login()
+                dockerBuild.build(env.DOCKER_USERNAME + "/" + env.GITHUB_REPO + ":" + env.BUILD_NUMBER)
+                dockerBuild.push(env.DOCKER_USERNAME + "/" + env.GITHUB_REPO + ":" + env.BUILD_NUMBER)
+            }
+          }
+        }
+    }
+
+    stage ('Update values') {
+      steps {
+        script {
+          checkout changelog: false, poll: false, scm: scmGit(branches: [[name: '*/main']], extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: env.GITHUB_REPO + '-helm-chart']], userRemoteConfigs: [[credentialsId: 'github', url: 'https://github.com/' + env.GITHUB_ORGANIZATION + '/' + env.GITHUB_REPO + '-helm-chart.git']])
+          dir(env.GITHUB_REPO + '-helm-chart') {
+            updateValues.updateDev(tag: env.BUILD_NUMBER)
+            updateValues.updateStage(tag: env.BUILD_NUMBER)
+            updateValues.updateProd(tag: env.BUILD_NUMBER)
+            gitCommit.commitAndPush(email: "jenkins@jenkins.com", organization: env.GITHUB_ORGANIZATION, service: env.GITHUB_REPO + '-helm-chart')
+          }
+        }
+      }
+    }
+  }
+  // post { 
+  //   always {
+  //     script {
+  //       cleanWs()
+  //     }
+  //   }
+  // }
+}
