@@ -34,7 +34,7 @@ pipeline {
         }
       }
     }
-    stage('Build, push and deploy') {
+    stage('Maven build, push and deploy') {
         when {
             allOf {
             expression { dockerfiles }
