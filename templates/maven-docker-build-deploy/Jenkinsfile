@@ -2,7 +2,7 @@
 
 /* Pipeline */
 pipeline {
-  agent { label "containerBuilds" }
+  agent { label "mavenContainerBuilds" }
   options { 
     // ansiColor('xterm') 
     disableConcurrentBuilds()
