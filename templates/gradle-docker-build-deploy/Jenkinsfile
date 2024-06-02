@@ -37,10 +37,7 @@ pipeline {
 
     stage('Gradle test') {
         when {
-            allOf {
-            expression { dockerfiles }
-            branch "main"
-            }
+            expression { run_tests }
         }
         steps {
           container('gradle') {

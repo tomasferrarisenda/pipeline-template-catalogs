@@ -44,6 +44,11 @@ parameters:
     type: string
     displayName: Specify the DockerHub username e.g. tferrari92 (mandatory)
 
+# let the user choose if he wants to run test or not
+  - name: run_tests
+    type: boolean
+    displayName: "Run tests?"
+    default: true
 
 multibranch:
   branchSource:
