@@ -34,6 +34,25 @@ pipeline {
         }
       }
     }
+
+    stage('Gradle test') {
+        when {
+            allOf {
+            expression { dockerfiles }
+            branch "main"
+            }
+        }
+        steps {
+          container('gradle') {
+            script {
+                gradle.wrapper()
+                gradle.build()
+                gradle.test()
+            }
+          }
+        }
+    }
+
     stage('Gradle build, push and deploy') {
         when {
             allOf {
@@ -44,7 +63,12 @@ pipeline {
         steps {
           container('gradle') {
             script {
-                gradleMicroBundle.microBundle()
+                gradle.microBundle()
+            }
+          }
+          container('gradle') {
+            script {
+                gradle.microBundle()
             }
           }
           container('docker') {
