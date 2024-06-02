@@ -13,7 +13,7 @@ parameters:
 
   - name: github_repo
     type: string
-    displayName: Specify the GitHub Repository e.g. omniman-service (mandatory)
+    displayName: Specify the GitHub Repository e.g. api-gradle-service (mandatory)
 
   # - name: system
   #   type: string
@@ -34,7 +34,7 @@ parameters:
   - name: dockerfiles
     type: string
     # default: "Dockerfile" # doesn't work
-    displayName: Specify the path to the Dockerfile(s) as semicolon delimited string e.g. application-code/invincible-gtg/Dockerfile (mandatory)
+    displayName: Specify the path to the Dockerfile(s) as semicolon delimited string e.g. Dockerfile (mandatory)
     
   # - name: build_arguments
   #   type: string
