@@ -13,7 +13,7 @@ parameters:
 
   - name: github_repo
     type: string
-    displayName: Specify the GitHub Repository e.g. frontend-service (mandatory)
+    displayName: Specify the GitHub Repository e.g. "frontend-service" or "mariadb-service" (mandatory)
 
   # - name: system
   #   type: string
