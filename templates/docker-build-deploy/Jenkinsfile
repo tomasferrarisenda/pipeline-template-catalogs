@@ -2,7 +2,7 @@
 
 /* Pipeline */
 pipeline {
-  agent { label "containerBuilds" }
+  agent { label "dockerContainerBuilds" }
   options { 
     // ansiColor('xterm') 
     disableConcurrentBuilds()
