@@ -2,4 +2,4 @@ version: 1
 type: pipeline-template-catalog
 
 name: pipeline-template-catalog-container
-displayName: "java-docker-build-and-deploy"
+displayName: "build-and-deploy"
