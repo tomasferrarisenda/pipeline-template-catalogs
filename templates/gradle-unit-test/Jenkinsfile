@@ -36,9 +36,9 @@ pipeline {
     }
 
     stage('Gradle tests') {
-        when {
-            expression { run_tests }
-        }
+        // when {
+        //     expression { run_tests }
+        // }
         steps {
           container('gradle') {
             script {
