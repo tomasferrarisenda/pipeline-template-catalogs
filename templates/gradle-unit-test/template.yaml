@@ -31,10 +31,10 @@ parameters:
     type: credentials
     displayName: Specify the GitHub Credentials ID name for the source code repository (mandatory)
 
-  - name: dockerfiles
-    type: string
-    # default: "Dockerfile" # doesn't work
-    displayName: Specify the path to the Dockerfile(s) as semicolon delimited string e.g. Dockerfile (mandatory)
+  # - name: dockerfiles
+  #   type: string
+  #   # default: "Dockerfile" # doesn't work
+  #   displayName: Specify the path to the Dockerfile(s) as semicolon delimited string e.g. Dockerfile (mandatory)
     
   # - name: build_arguments
   #   type: string
