@@ -40,9 +40,6 @@ pipeline {
     }
 
     stage ('Preparation') {
-        // when {
-        //     previousStages() == 'SUCCESS'
-        // }
         steps {
             script {
               env.DOCKERFILES           = dockerfiles
@@ -55,15 +52,7 @@ pipeline {
 
     stage('Gradle test') {
         when {
-            // Run only if branch is main 
             expression { run_tests }
-            // allOf {
-            //   // expression { dockerfiles }
-            //   // branch "main"
-            //   expression { run_tests }
-            //   // previos stages were succesful
-            //   previousStages() == 'SUCCESS'
-            // }
         }
         steps {
             container('gradle') {
@@ -80,7 +69,6 @@ pipeline {
         when {
             allOf {
                 expression { dockerfiles }
-                // branch "main"
             }
         }
         steps {
