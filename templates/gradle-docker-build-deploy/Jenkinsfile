@@ -67,9 +67,7 @@ pipeline {
 
     stage('Gradle-Docker build & push image') {
         when {
-            allOf {
-                expression { dockerfiles }
-            }
+            expression { dockerfiles }
         }
         steps {
             container('gradle') {
