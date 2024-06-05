@@ -2,113 +2,105 @@
 
 /* Pipeline */
 pipeline {
-  agent { label "gradleContainerBuilds" }
+    agent { label "gradleContainerBuilds" }
 
-  options { 
-      disableConcurrentBuilds()
-      skipDefaultCheckout true
-  }
+    options { 
+        disableConcurrentBuilds()
+        skipDefaultCheckout true
+    }
 
-  environment {
-     HOME           = "${WORKSPACE}"
-  }
+    environment {
+      HOME           = "${WORKSPACE}"
+    }
 
-  stages {
-    stage ('CleanWs & checkout SCM') {
-        // when {
-        //     // Run only if branch is main
-        //     branch "main"
-        //     // allOf {
-        //     //   // expression { dockerfiles }
-        //     // }
-        // }
-
-        when {
-            expression {
-                if (env.BRANCH_NAME != 'main') {
-                    println("#####################################################")
-                    println("#####################################################")
-                    println(" ")
-                    println("Sorry.. This pipeline only runs on the 'main' branch.")
-                    println(" ")
-                    println("#####################################################")
-                    println("#####################################################")
-                    error("This pipeline only runs on the 'main' branch.")
+    stages {
+        stage ('CleanWs & checkout SCM') {
+            when {
+                expression {
+                    if (env.BRANCH_NAME != 'main') {
+                        println("#####################################################")
+                        println("#####################################################")
+                        println(" ")
+                        println("Sorry... This pipeline only runs on the 'main' branch.")
+                        println(" ")
+                        println("#####################################################")
+                        println("#####################################################")
+                        error("This pipeline only runs on the 'main' branch.")
+                    }
+                    return true
                 }
-                return true
             }
-        }
-        steps {
-            script {
-                deleteDir()
-                checkout scm
-            }
-          }
-    }
-
-    stage ('Preparation') {
-        steps {
-            script {
-              env.DOCKERFILES           = dockerfiles
-              env.GITHUB_ORGANIZATION   = github_organization.toLowerCase()
-              env.GITHUB_REPO           = github_repo.toLowerCase()
-              env.DOCKER_USERNAME       = docker_username.toLowerCase()
-            }
-        }
-    }
-
-    stage('Gradle test') {
-        when {
-            expression { run_tests }
-        }
-        steps {
-            container('gradle') {
+            steps {
                 script {
-                    gradle.wrapper()
-                    gradle.build()
-                    gradle.test()
+                    deleteDir()
+                    checkout scm
                 }
-            }
+              }
         }
-    }
 
-    stage('Gradle-Docker build & push image') {
-        when {
-            expression { dockerfiles }
-        }
-        steps {
-            container('gradle') {
+        stage ('Preparation') {
+            steps {
                 script {
-                    gradle.microBundle()
-                }
-            }
-            container('gradle') {
-                script {
-                    gradle.microBundle()
-                }
-            }
-            container('docker') {
-                script {
-                    dockerBuild.login()
-                    dockerBuild.build(env.DOCKER_USERNAME + "/" + env.GITHUB_REPO + ":" + env.BUILD_NUMBER)
-                    dockerBuild.push(env.DOCKER_USERNAME + "/" + env.GITHUB_REPO + ":" + env.BUILD_NUMBER)
+                  env.DOCKERFILES           = dockerfiles
+                  env.GITHUB_ORGANIZATION   = github_organization.toLowerCase()
+                  env.GITHUB_REPO           = github_repo.toLowerCase()
+                  env.DOCKER_USERNAME       = docker_username.toLowerCase()
                 }
             }
         }
-    }
 
-    stage ('Update values in helm chart (deploy)') {
-        steps {
-            script {
-                checkout changelog: false, poll: false, scm: scmGit(branches: [[name: '*/main']], extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: env.GITHUB_REPO + '-helm-chart']], userRemoteConfigs: [[credentialsId: 'github', url: 'https://github.com/' + env.GITHUB_ORGANIZATION + '/' + env.GITHUB_REPO + '-helm-chart.git']])
-                dir(env.GITHUB_REPO + '-helm-chart') {
-                    updateValues.updateDev(tag: env.BUILD_NUMBER)
-                    updateValues.updateStage(tag: env.BUILD_NUMBER)
-                    updateValues.updateProd(tag: env.BUILD_NUMBER)
-                    gitCommit.commitAndPush(email: "jenkins@jenkins.com", organization: env.GITHUB_ORGANIZATION, service: env.GITHUB_REPO + '-helm-chart')
+        stage('Gradle test') {
+            when {
+                expression { run_tests }
+            }
+            steps {
+                container('gradle') {
+                    script {
+                        gradle.wrapper()
+                        gradle.build()
+                        gradle.test()
+                    }
+                }
+            }
+        }
+
+        stage('Gradle-Docker build & push image') {
+            when {
+                expression { dockerfiles }
+            }
+            steps {
+                container('gradle') {
+                    script {
+                        gradle.microBundle()
+                    }
+                }
+                container('gradle') {
+                    script {
+                        gradle.microBundle()
+                    }
+                }
+                container('docker') {
+                    script {
+                        dockerBuild.login()
+                        dockerBuild.build(env.DOCKER_USERNAME + "/" + env.GITHUB_REPO + ":" + env.BUILD_NUMBER)
+                        dockerBuild.push(env.DOCKER_USERNAME + "/" + env.GITHUB_REPO + ":" + env.BUILD_NUMBER)
+                    }
+                }
+            }
+        }
+
+        stage ('Update values in helm chart (deploy)') {
+            steps {
+                script {
+                    checkout changelog: false, poll: false, scm: scmGit(branches: [[name: '*/main']], extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: env.GITHUB_REPO + '-helm-chart']], userRemoteConfigs: [[credentialsId: 'github', url: 'https://github.com/' + env.GITHUB_ORGANIZATION + '/' + env.GITHUB_REPO + '-helm-chart.git']])
+                    dir(env.GITHUB_REPO + '-helm-chart') {
+                        updateValues.updateDev(tag: env.BUILD_NUMBER)
+                        updateValues.updateStage(tag: env.BUILD_NUMBER)
+                        updateValues.updateProd(tag: env.BUILD_NUMBER)
+                        gitCommit.commitAndPush(email: "jenkins@jenkins.com", organization: env.GITHUB_ORGANIZATION, service: env.GITHUB_REPO + '-helm-chart')
+                    }
                 }
             }
         }
     }
-  }
 }
