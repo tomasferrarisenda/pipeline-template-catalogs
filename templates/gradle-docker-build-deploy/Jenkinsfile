@@ -15,13 +15,19 @@ pipeline {
 
   stages {
     stage ('cleanWs & checkout scm') {
-      steps {
-        script {
-          deleteDir()
-          // cleanWs()
-          checkout scm
+        when {
+            allOf {
+            expression { dockerfiles }
+            branch "main"
+            }
         }
-      }
+        steps {
+          script {
+            deleteDir()
+            // cleanWs()
+            checkout scm
+          }
+        }
     }
     stage ('preparation') {
       steps {
@@ -53,8 +59,8 @@ pipeline {
     stage('Gradle build, push and deploy') {
         when {
             allOf {
-            expression { dockerfiles }
-            branch "main"
+              expression { dockerfiles }
+              branch "main"
             }
         }
         steps {
