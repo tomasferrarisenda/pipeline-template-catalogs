@@ -28,6 +28,7 @@ pipeline {
             }
           }
     }
+
     stage ('Preparation') {
         steps {
             script {
@@ -82,7 +83,7 @@ pipeline {
         }
     }
 
-    stage ('Update values (deploy)') {
+    stage ('Update values in helm chart (deploy)') {
         steps {
             script {
                 checkout changelog: false, poll: false, scm: scmGit(branches: [[name: '*/main']], extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: env.GITHUB_REPO + '-helm-chart']], userRemoteConfigs: [[credentialsId: 'github', url: 'https://github.com/' + env.GITHUB_ORGANIZATION + '/' + env.GITHUB_REPO + '-helm-chart.git']])
