@@ -74,11 +74,6 @@ pipeline {
                         gradle.microBundle()
                     }
                 }
-                container('gradle') {
-                    script {
-                        gradle.microBundle()
-                    }
-                }
                 container('docker') {
                     script {
                         dockerBuild.login()
