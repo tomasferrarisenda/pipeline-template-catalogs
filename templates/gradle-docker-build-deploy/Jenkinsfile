@@ -26,6 +26,7 @@ pipeline {
         when {
             expression {
                 if (env.BRANCH_NAME != 'main') {
+                    println("This pipeline only runs on the 'main' branch.")
                     error("This pipeline only runs on the 'main' branch.")
                 }
                 return true
